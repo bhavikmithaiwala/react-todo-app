@@ -1,11 +1,54 @@
-import { formatDate, isOverdue } from '../../utils/dates'
+﻿import { formatDate, isOverdue } from '../../utils/dates'
 import type { Task } from '../../types/task'
-export interface TaskActions { onToggle: (id: string) => void; onDelete: (id: string) => void; onEdit: (task: Task) => void; onFocus: (id: string) => void; focusIds: string[] }
-export function TaskItem({ task, onToggle, onDelete, onEdit, onFocus, focusIds }: TaskActions & { task: Task }) {
-  return <article className={task.completed ? 'task completed' : 'task'}><input type="checkbox" aria-label={`Complete ${task.title}`} checked={task.completed} onChange={() => onToggle(task.id)} /><div className="task-body"><strong>{task.title}</strong><span className={`badge ${task.priority}`}>{task.priority}</span><span className="category">{task.category}</span>{task.description && <p>{task.description}</p>}<p className={isOverdue(task.dueDate, task.completed) ? "overdue" : ""}>{formatDate(task.dueDate)}{isOverdue(task.dueDate, task.completed) ? " � Overdue" : ""}</p></div><button aria-pressed={focusIds.includes(task.id)} onClick={() => onFocus(task.id)} aria-label={`Focus ${task.title}`}>{focusIds.includes(task.id) ? "? Focused" : "? Focus"}</button><button onClick={() => onEdit(task)} aria-label={`Edit ${task.title}`}>Edit</button><button onClick={() => onDelete(task.id)} aria-label={`Delete ${task.title}`}>Delete</button></article>
+export interface TaskActions {
+  onToggle: (id: string) => void
+  onDelete: (id: string) => void
+  onEdit: (task: Task) => void
+  onFocus: (id: string) => void
+  focusIds: string[]
 }
-
-
-
-
-
+export function TaskItem({
+  task,
+  onToggle,
+  onDelete,
+  onEdit,
+  onFocus,
+  focusIds,
+}: TaskActions & { task: Task }) {
+  return (
+    <article className={task.completed ? 'task completed' : 'task'}>
+      <input
+        type="checkbox"
+        aria-label={`Complete ${task.title}`}
+        checked={task.completed}
+        onChange={() => onToggle(task.id)}
+      />
+      <div className="task-body">
+        <strong>{task.title}</strong>
+        <span className={`badge ${task.priority}`}>{task.priority}</span>
+        <span className="category">{task.category}</span>
+        {task.description && <p>{task.description}</p>}
+        <p className={isOverdue(task.dueDate, task.completed) ? 'overdue' : ''}>
+          {formatDate(task.dueDate)}
+          {isOverdue(task.dueDate, task.completed) ? ' · Overdue' : ''}
+        </p>
+      </div>
+      <button
+        aria-pressed={focusIds.includes(task.id)}
+        onClick={() => onFocus(task.id)}
+        aria-label={`Focus ${task.title}`}
+      >
+        {focusIds.includes(task.id) ? 'Focused' : 'Focus'}
+      </button>
+      <button onClick={() => onEdit(task)} aria-label={`Edit ${task.title}`}>
+        Edit
+      </button>
+      <button
+        onClick={() => onDelete(task.id)}
+        aria-label={`Delete ${task.title}`}
+      >
+        Delete
+      </button>
+    </article>
+  )
+}
