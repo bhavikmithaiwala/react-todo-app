@@ -1,4 +1,4 @@
-﻿import { useState } from 'react'
+import { useState } from 'react'
 import type { TaskDraft } from '../../types/task'
 import { emptyDraft } from '../../types/task'
 
@@ -38,6 +38,7 @@ export function TaskForm({
       <label htmlFor="task-title">Task title</label>
       <input
         id="task-title"
+        autoFocus
         value={draft.title}
         aria-invalid={!!error}
         aria-describedby={error ? 'title-error' : undefined}
@@ -107,7 +108,7 @@ export function TaskForm({
           </button>
         )}
         <button className="primary" type="submit">
-          {onCancel ? 'Save changes' : 'Add task'}
+          {initial === emptyDraft ? 'Add task' : 'Save changes'}
         </button>
       </div>
     </form>

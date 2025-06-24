@@ -212,3 +212,9 @@ describe('storage and backups', () => {
     ).toThrow()
   })
 })
+
+it('preserves unsupported metadata punctuation instead of partially consuming it', () => {
+  expect(parseQuickAdd('Read #work.notes !high-ish').title).toBe(
+    'Read #work.notes !high-ish',
+  )
+})

@@ -1,5 +1,5 @@
-﻿import type { Task } from '../../types/task'
-import { formatDate } from '../../utils/dates'
+import type { Task } from '../../types/task'
+import { formatDate, localDate } from '../../utils/dates'
 export function DashboardActivity({
   tasks,
   today,
@@ -46,7 +46,7 @@ export function DashboardActivity({
                   : {task.title}
                 </span>
                 <time dateTime={task.updatedAt}>
-                  {formatDate(task.updatedAt.slice(0, 10))}
+                  {formatDate(localDate(new Date(task.updatedAt)))}
                 </time>
               </li>
             ))}
