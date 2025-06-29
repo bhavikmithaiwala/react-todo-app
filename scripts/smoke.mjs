@@ -172,13 +172,11 @@ try {
     .click()
   const download = await downloadReady
   assert.match(download.suggestedFilename(), /^taskdeck-.*\.json$/)
-  await page
-    .getByLabel('Restore a JSON backup')
-    .setInputFiles({
-      name: 'backup.json',
-      mimeType: 'application/json',
-      buffer: Buffer.from('[]'),
-    })
+  await page.getByLabel('Restore a JSON backup').setInputFiles({
+    name: 'backup.json',
+    mimeType: 'application/json',
+    buffer: Buffer.from('[]'),
+  })
   await page.getByRole('dialog').waitFor()
   await page.getByRole('button', { name: 'Cancel', exact: true }).click()
   assert.equal(
