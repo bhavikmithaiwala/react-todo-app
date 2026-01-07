@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # React + TypeScript + Vite
 
 This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
@@ -76,3 +77,7 @@ export default defineConfig([
 ])
 
 ```
+=======
+# react-todo-app
+A React-based task management application with plans for productivity features.
+>>>>>>> cefb175fa729440741d713204899fb1623fde904
