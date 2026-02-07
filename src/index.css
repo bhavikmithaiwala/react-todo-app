@@ -17,3 +17,7 @@ p { color: var(--muted); line-height: 1.6; }
 .task-body { flex: 1; min-width: 0; overflow-wrap: anywhere; }
 .task.completed strong { text-decoration: line-through; color: var(--muted); }
 .task input[type=checkbox] { width: 19px; height: 19px; accent-color: var(--accent); flex-shrink: 0; }
+:focus-visible { outline: 3px solid var(--accent); outline-offset: 3px; }
+.skip-link { position: absolute; left: 12px; top: -100px; z-index: 100; background: var(--panel); padding: 12px; color: var(--accent); }
+.skip-link:focus { top: 12px; }
+@media (prefers-reduced-motion: reduce) { * { scroll-behavior: auto !important; transition: none !important; } }
