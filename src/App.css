@@ -39,3 +39,4 @@ dialog::backdrop { background: #14182c66; backdrop-filter: blur(3px); }
 .sidebar-note { background: var(--tint); }
 .nav-item { color: var(--muted); }
 .nav-item.selected { color: var(--accent); background: var(--tint); }
+.toast { position: fixed; bottom: 24px; right: 24px; max-width: min(520px, calc(100vw - 32px)); background: var(--panel); border: 1px solid var(--border); box-shadow: 0 10px 40px #0002; border-radius: 12px; padding: 16px; display: flex; align-items: center; gap: 14px; z-index: 50; font-size: 13px; }
