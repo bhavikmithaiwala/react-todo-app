@@ -12,6 +12,9 @@ import { loadTasks, TASK_KEY } from './services/storage'
 import { defaultFilters, filterTasks } from './utils/tasks'
 import { localDate } from './utils/dates'
 import { useTheme } from './hooks/useTheme'
+import { DailyFocus } from './components/dashboard/DailyFocus'
+import { toggleFocus } from './utils/focus'
+import type { DailyFocus as FocusState } from './types/task'
 import './App.css'
 
 export default function App() {
@@ -24,6 +27,7 @@ export default function App() {
   const [filters, setFilters] = useState(defaultFilters)
   const [editor, setEditor] = useState<{ task: Task | null } | null>(null)
   const [confirm, setConfirm] = useState(false)
+  const [focus, setFocus] = useState<FocusState>({ date: localDate(), ids: [] })
   const [deleted, setDeleted] = useState<Task | null>(null)
   function updateTasks(next: Task[]) {
     setTasks(next)
@@ -48,7 +52,9 @@ export default function App() {
     setDeleted(tasks.find(task => task.id === id) ?? null)
     updateTasks(tasks.filter(task => task.id !== id)); setMessage('Task deleted. You can undo this action.')
   }
+  function selectFocus(id: string) { try { setFocus(toggleFocus({ ...focus, ids: focus.ids.filter(value => tasks.some(task => task.id === value)) }, id, localDate())) } catch (error) { setMessage((error as Error).message) } }
   const today = localDate()
+  const focusIds = focus.date === today ? focus.ids : []
   const viewTasks = tasks.filter(task => section === 'Today' ? !task.completed && task.dueDate === today : section === 'Upcoming' ? !task.completed && task.dueDate > today : section === 'Completed' ? task.completed : true)
   const visibleTasks = filterTasks(viewTasks, filters)
   return <div className="app-shell">
@@ -59,10 +65,10 @@ export default function App() {
       <main id="main" tabIndex={-1}>
         <div className="page-heading"><div><p className="eyebrow">{new Date().toLocaleDateString(undefined, { weekday: 'long', month: 'long', day: 'numeric' }).toUpperCase()}</p><h1>{section === 'Dashboard' ? 'Your day, at a glance' : section}</h1><p>A little structure. A lot more possibility.</p></div><button className="primary" onClick={() => setEditor({ task: null })}>+ New task</button></div>
         {(storageError || themeError) && <p role="alert">{storageError || themeError}</p>}
-        <TaskStats tasks={tasks} />
+        <TaskStats tasks={tasks} />{section === "Dashboard" && <DailyFocus tasks={tasks} ids={focusIds} onFocus={selectFocus} onToggle={toggle} />}
         <section className="panel task-section"><div className="section-heading"><div><h2>{section === 'Dashboard' ? 'Your tasks' : section}</h2><p>{visibleTasks.length} tasks in this view</p></div><button disabled={!tasks.some(task => task.completed)} onClick={() => setConfirm(true)}>Clear completed</button></div>
           <TaskFilters categories={[...new Set(tasks.map(task => task.category))].sort()} filters={filters} onChange={setFilters} />
-          <TaskList tasks={visibleTasks} onToggle={toggle} onDelete={remove} onEdit={task => setEditor({ task })} />
+          <TaskList tasks={visibleTasks} focusIds={focusIds} onFocus={selectFocus} onToggle={toggle} onDelete={remove} onEdit={task => setEditor({ task })} />
         </section>
       </main>
     </div>
@@ -71,3 +77,4 @@ export default function App() {
     {confirm && <ConfirmDialog title="Clear completed tasks?" message="These records will also be removed from your statistics. Export a backup first if you want to keep them." onCancel={() => setConfirm(false)} onConfirm={() => { updateTasks(tasks.filter(task => !task.completed)); setConfirm(false); setMessage('Completed tasks cleared.') }} />}
   </div>
 }
+
