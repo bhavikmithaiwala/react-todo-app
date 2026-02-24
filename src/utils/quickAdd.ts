@@ -1,11 +1,11 @@
-﻿import { localDate } from './dates'
+import { localDate } from './dates'
 import type { TaskDraft } from '../types/task'
 import { emptyDraft } from '../types/task'
 export function parseQuickAdd(input: string, now = new Date()): TaskDraft {
   let title = input.trim()
   const draft = { ...emptyDraft, title }
-  const categories = [...title.matchAll(/(?:^|\s)#([\p{L}\p{N}_-]+)/gu)]
-  const priorities = [...title.matchAll(/(?:^|\s)!(low|medium|high)\b/gi)]
+  const categories = [...title.matchAll(/(?:^|\s)#([\p{L}\p{N}_-]+)(?=\s|$)/gu)]
+  const priorities = [...title.matchAll(/(?:^|\s)!(low|medium|high)(?=\s|$)/gi)]
   if (categories.length === 1) {
     draft.category = categories[0][1]
     title = title.replace(categories[0][0], ' ')

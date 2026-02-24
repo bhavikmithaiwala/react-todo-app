@@ -1,4 +1,4 @@
-﻿import { fireEvent, render, screen, within } from '@testing-library/react'
+import { fireEvent, render, screen, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { describe, expect, it, vi } from 'vitest'
 import App from './App'
@@ -12,7 +12,7 @@ async function newTask(title: string) {
   await user.click(screen.getByRole('button', { name: /New task/ }))
   const dialog = screen.getByRole('dialog')
   await user.type(within(dialog).getByLabelText('Task title'), title)
-  await user.click(within(dialog).getByRole('button', { name: 'Save changes' }))
+  await user.click(within(dialog).getByRole('button', { name: 'Add task' }))
   return user
 }
 describe('TaskDeck workflows', () => {
@@ -37,7 +37,7 @@ describe('TaskDeck workflows', () => {
     await user.click(screen.getByRole('button', { name: /New task/ }))
     await user.click(
       within(screen.getByRole('dialog')).getByRole('button', {
-        name: 'Save changes',
+        name: 'Add task',
       }),
     )
     expect(screen.getByRole('alert')).toHaveTextContent(
