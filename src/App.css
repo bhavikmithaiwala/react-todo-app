@@ -34,3 +34,8 @@ dialog { border: 1px solid var(--border); border-radius: 16px; padding: 28px; wi
 dialog::backdrop { background: #14182c66; backdrop-filter: blur(3px); }
 @media (max-width: 1000px) { .sidebar { width: 190px; padding: 25px 12px; } main { padding: 24px; } .header { padding: 20px 24px; } .stats-grid { gap: 10px; } }
 @media (max-width: 720px) { .app-shell { display: block; } .sidebar { width: auto; padding: 16px; border-bottom: 1px solid var(--border); } .brand { margin: 0 0 12px; } .sidebar nav { display: flex; overflow-x: auto; } .nav-item { width: auto; flex-shrink: 0; padding: 10px; } .sidebar-note, .sidebar > .eyebrow { display: none; } .header > span { display: none; } .header input { max-width: none; } main { padding: 20px 16px; } .stats-grid { grid-template-columns: repeat(2, 1fr); } .task { flex-wrap: wrap; padding: 16px; gap: 10px; } .task-body { min-width: calc(100% - 40px); } .task > button { font-size: 12px; } .completion { flex-wrap: wrap; } }
+:root[data-theme=dark] { --bg: #171b27; --panel: #202636; --text: #edf0f7; --muted: #a4afc3; --border: #343c50; --accent: #9a91ff; --tint: #343052; color-scheme: dark; }
+.sidebar, .header { background: var(--panel); border-color: var(--border); }
+.sidebar-note { background: var(--tint); }
+.nav-item { color: var(--muted); }
+.nav-item.selected { color: var(--accent); background: var(--tint); }
