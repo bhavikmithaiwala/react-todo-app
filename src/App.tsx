@@ -19,6 +19,7 @@ import { useLocalDay } from './hooks/useLocalDay'
 import { loadFocus, FOCUS_KEY } from './services/focusStorage'
 import { QuickAdd } from './components/tasks/QuickAdd'
 import { Statistics } from './components/dashboard/Statistics'
+import { DashboardActivity } from './components/dashboard/DashboardActivity'
 import './App.css'
 
 export default function App() {
@@ -73,7 +74,7 @@ export default function App() {
         {section === "Statistics" ? <Statistics tasks={tasks} /> : <section className="panel task-section"><div className="section-heading"><div><h2>{section === 'Dashboard' ? 'Your tasks' : section}</h2><p>{visibleTasks.length} tasks in this view</p></div><button disabled={!tasks.some(task => task.completed)} onClick={() => setConfirm(true)}>Clear completed</button></div>
           <TaskFilters categories={[...new Set(tasks.map(task => task.category))].sort()} filters={filters} onChange={setFilters} />
           <TaskList tasks={visibleTasks} focusIds={focusIds} onFocus={selectFocus} onToggle={toggle} onDelete={remove} onEdit={task => setEditor({ task })} />
-        </section>}
+        </section>}{section === "Dashboard" && <DashboardActivity tasks={tasks} today={today} />}
       </main>
     </div>
     {editor && <TaskEditor task={editor.task} onSave={saveTask} onClose={() => setEditor(null)} />}
@@ -81,6 +82,7 @@ export default function App() {
     {confirm && <ConfirmDialog title="Clear completed tasks?" message="These records will also be removed from your statistics. Export a backup first if you want to keep them." onCancel={() => setConfirm(false)} onConfirm={() => { updateTasks(tasks.filter(task => !task.completed)); setConfirm(false); setMessage('Completed tasks cleared.') }} />}
   </div>
 }
+
 
 
 
