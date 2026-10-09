@@ -40,3 +40,13 @@ dialog::backdrop { background: #14182c66; backdrop-filter: blur(3px); }
 .nav-item { color: var(--muted); }
 .nav-item.selected { color: var(--accent); background: var(--tint); }
 .toast { position: fixed; bottom: 24px; right: 24px; max-width: min(520px, calc(100vw - 32px)); background: var(--panel); border: 1px solid var(--border); box-shadow: 0 10px 40px #0002; border-radius: 12px; padding: 16px; display: flex; align-items: center; gap: 14px; z-index: 50; font-size: 13px; }
+.page-heading, .section-heading { display: flex; align-items: center; justify-content: space-between; gap: 20px; }
+.page-heading p { margin: 6px 0; }
+h2 { font-size: 18px; margin: 0; letter-spacing: -.3px; }
+.section-heading p { margin: 4px 0 0; font-size: 12px; }
+.header-divider { margin: 0 12px; color: var(--border); }
+.task-section .task { box-shadow: none; }
+.editor { max-height: 90vh; overflow-y: auto; }
+button { transition: background .15s, border-color .15s; }
+.task:hover { border-color: #b5b0e3; }
+@media (max-width: 720px) { .page-heading { align-items: flex-start; } .page-heading .primary { white-space: nowrap; padding: 10px; font-size: 12px; } h1 { font-size: 26px; } .section-heading { flex-wrap: wrap; } .panel { padding: 18px; } }
