@@ -9,6 +9,7 @@ import { TaskFilters } from './components/tasks/TaskFilters'
 import { defaultFilters, filterTasks } from './utils/tasks'
 import { TaskStats } from './components/dashboard/TaskStats'
 import { ConfirmDialog } from './components/common/ConfirmDialog'
+import { localDate } from './utils/dates'
 import './App.css'
 
 export default function App() {
@@ -29,9 +30,12 @@ export default function App() {
     updateTasks([{ ...draft, id: crypto.randomUUID(), completed: false, createdAt: now, updatedAt: now, completedAt: null }, ...tasks])
   }
   function toggle(id: string) { updateTasks(tasks.map(task => task.id === id ? { ...task, completed: !task.completed, completedAt: task.completed ? null : new Date().toISOString(), updatedAt: new Date().toISOString() } : task)) }
+  const today = localDate()
+  const viewTasks = tasks.filter(task => section === 'Today' ? !task.completed && task.dueDate === today : section === 'Upcoming' ? !task.completed && task.dueDate > today : section === 'Completed' ? task.completed : true)
   function remove(id: string) { updateTasks(tasks.filter(task => task.id !== id)) }
-  return <div className="app-shell"><Sidebar section={section} onNavigate={setSection} /><div className="workspace"><header className="header"><span>Personal workspace</span></header><main id="main"><p className="eyebrow">LET’S MAKE TODAY COUNT</p><h1>{section}</h1>{message && <p role="alert">{message}</p>}<p>Your space for a more focused day.</p><TaskStats tasks={tasks} /><section className="panel"><TaskForm key={editing?.id ?? "new"} initial={editing ?? undefined} onCancel={editing ? () => setEditing(null) : undefined} onSave={draft => { if (editing) { updateTasks(tasks.map(task => task.id === editing.id ? { ...task, ...draft, updatedAt: new Date().toISOString() } : task)); setEditing(null) } else addTask(draft) }} /></section><button disabled={!tasks.some(task => task.completed)} onClick={() => setConfirm(true)}>Clear completed</button><TaskFilters filters={filters} onChange={setFilters} /><TaskList tasks={filterTasks(tasks, filters)} onToggle={toggle} onDelete={remove} onEdit={setEditing} /></main></div>{confirm && <ConfirmDialog title="Clear completed tasks?" message="These records will also be removed from your statistics. Export a backup first if you want to keep them." onCancel={() => setConfirm(false)} onConfirm={() => { updateTasks(tasks.filter(task => !task.completed)); setConfirm(false) }} />}</div>
+  return <div className="app-shell"><Sidebar section={section} onNavigate={setSection} /><div className="workspace"><header className="header"><span>Personal workspace</span></header><main id="main"><p className="eyebrow">LET’S MAKE TODAY COUNT</p><h1>{section}</h1>{message && <p role="alert">{message}</p>}<p>Your space for a more focused day.</p><TaskStats tasks={tasks} /><section className="panel"><TaskForm key={editing?.id ?? "new"} initial={editing ?? undefined} onCancel={editing ? () => setEditing(null) : undefined} onSave={draft => { if (editing) { updateTasks(tasks.map(task => task.id === editing.id ? { ...task, ...draft, updatedAt: new Date().toISOString() } : task)); setEditing(null) } else addTask(draft) }} /></section><button disabled={!tasks.some(task => task.completed)} onClick={() => setConfirm(true)}>Clear completed</button><TaskFilters filters={filters} onChange={setFilters} /><TaskList tasks={filterTasks(viewTasks, filters)} onToggle={toggle} onDelete={remove} onEdit={setEditing} /></main></div>{confirm && <ConfirmDialog title="Clear completed tasks?" message="These records will also be removed from your statistics. Export a backup first if you want to keep them." onCancel={() => setConfirm(false)} onConfirm={() => { updateTasks(tasks.filter(task => !task.completed)); setConfirm(false) }} />}</div>
 }
+
 
 
 
