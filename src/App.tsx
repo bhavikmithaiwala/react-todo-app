@@ -13,5 +13,6 @@ export default function App() {
     const now = new Date().toISOString()
     setTasks(previous => [{ ...draft, id: crypto.randomUUID(), completed: false, createdAt: now, updatedAt: now, completedAt: null }, ...previous])
   }
-  return <div className="app-shell"><Sidebar section={section} onNavigate={setSection} /><div className="workspace"><header className="header"><span>Personal workspace</span></header><main id="main"><p className="eyebrow">LET’S MAKE TODAY COUNT</p><h1>{section}</h1><p>Your space for a more focused day.</p><section className="panel"><TaskForm onSave={addTask} /></section><TaskList tasks={tasks} onToggle={() => {}} onDelete={() => {}} /></main></div></div>
+  return <div className="app-shell"><Sidebar section={section} onNavigate={setSection} /><div className="workspace"><header className="header"><span>Personal workspace</span></header><main id="main"><p className="eyebrow">LET’S MAKE TODAY COUNT</p><h1>{section}</h1><p>Your space for a more focused day.</p><section className="panel"><TaskForm onSave={addTask} /></section><TaskList tasks={tasks} onToggle={id => setTasks(previous => previous.map(task => task.id === id ? { ...task, completed: !task.completed, completedAt: task.completed ? null : new Date().toISOString(), updatedAt: new Date().toISOString() } : task))} onDelete={() => {}} /></main></div></div>
 }
+
