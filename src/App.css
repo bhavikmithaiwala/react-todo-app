@@ -59,3 +59,6 @@ button { transition: background .15s, border-color .15s; }
 .focus-card button { padding: 5px 8px; margin-top: 10px; font-size: 11px; }
 .focus-progress { background: var(--tint); color: var(--accent); border-radius: 20px; padding: 8px 12px; font-size: 12px; }
 @media (max-width: 900px) { .focus-grid { grid-template-columns: 1fr; } }
+.quick-row { display: flex; gap: 10px; }
+.quick-row button { white-space: nowrap; }
+.quick-preview, .quick-hint { font-size: 12px; margin-bottom: 0; }
