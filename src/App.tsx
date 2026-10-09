@@ -15,6 +15,8 @@ import { useTheme } from './hooks/useTheme'
 import { DailyFocus } from './components/dashboard/DailyFocus'
 import { toggleFocus } from './utils/focus'
 import type { DailyFocus as FocusState } from './types/task'
+import { useLocalDay } from './hooks/useLocalDay'
+import { loadFocus, FOCUS_KEY } from './services/focusStorage'
 import './App.css'
 
 export default function App() {
@@ -27,7 +29,7 @@ export default function App() {
   const [filters, setFilters] = useState(defaultFilters)
   const [editor, setEditor] = useState<{ task: Task | null } | null>(null)
   const [confirm, setConfirm] = useState(false)
-  const [focus, setFocus] = useState<FocusState>({ date: localDate(), ids: [] })
+  const [focus, setFocus] = useState<FocusState>(loadFocus)
   const [deleted, setDeleted] = useState<Task | null>(null)
   function updateTasks(next: Task[]) {
     setTasks(next)
@@ -52,8 +54,8 @@ export default function App() {
     setDeleted(tasks.find(task => task.id === id) ?? null)
     updateTasks(tasks.filter(task => task.id !== id)); setMessage('Task deleted. You can undo this action.')
   }
-  function selectFocus(id: string) { try { setFocus(toggleFocus({ ...focus, ids: focus.ids.filter(value => tasks.some(task => task.id === value)) }, id, localDate())) } catch (error) { setMessage((error as Error).message) } }
-  const today = localDate()
+  function selectFocus(id: string) { try { const next = toggleFocus({ ...focus, ids: focus.ids.filter(value => tasks.some(task => task.id === value)) }, id, localDate()); setFocus(next); try { localStorage.setItem(FOCUS_KEY, JSON.stringify(next)) } catch { setMessage("Daily focus could not be saved.") } } catch (error) { setMessage((error as Error).message) } }
+  const today = useLocalDay()
   const focusIds = focus.date === today ? focus.ids : []
   const viewTasks = tasks.filter(task => section === 'Today' ? !task.completed && task.dueDate === today : section === 'Upcoming' ? !task.completed && task.dueDate > today : section === 'Completed' ? task.completed : true)
   const visibleTasks = filterTasks(viewTasks, filters)
@@ -77,4 +79,5 @@ export default function App() {
     {confirm && <ConfirmDialog title="Clear completed tasks?" message="These records will also be removed from your statistics. Export a backup first if you want to keep them." onCancel={() => setConfirm(false)} onConfirm={() => { updateTasks(tasks.filter(task => !task.completed)); setConfirm(false); setMessage('Completed tasks cleared.') }} />}
   </div>
 }
+
 
